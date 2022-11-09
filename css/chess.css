@@ -50,6 +50,7 @@ td[name="dark"]{
     padding: 0;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 25px;
     width: 960px;
     height: 960px;
     table-layout: grid;
