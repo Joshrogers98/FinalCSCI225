@@ -1,14 +1,30 @@
-//this creates the board for the game
+//establish constants
 const lettersArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 const piecesArray = ['WP', 'WR', 'WN', 'WB', 'WQ', 'WK', 'BP', 'BR', 'BN', 'BB', 'BQ', 'BK', 'empty'];
+const startFormation = ['R' , 'N' , 'B' , 'Q' , 'K' , 'B' , 'N' , 'R']
+const scoreBoard = document.getElementById('moves');
 
+//establish "global" variables to be used later in local functions
+var pieceIndex = null;
+var pieceColor = '';
+var pieceID = '';
+var pieceName = '';
+var unselectedPiece = document.getElementsByClassName('chessPiece')
+var selectedPiece = document.getElementsByClassName('chessPiece-selected');
+var origin = '';
+var destination = '';
 
+//this creates the board for the game and contains all the rules for the game in separate funtions
 function newGame() {
+
+    //reset scoreboard
+    scoreBoard.innerHTML = '<thead><tr><th>Move</th><th>Origin</th><th>Destination</th></tr></thead>';
+
+    //establish turn counter / reset to 1
     var turnCounter = 1;
-    console.log(turnCounter + " White's turn");
-    document.getElementById('chessBoard').innerHTML = "";
+
+    //set the variable "make board" to table content
     var makeBoard = "";
-    //set the board
     for (var i = 0; i < 8; i++) {
         //create the rows
         makeBoard += '<tr id="rank' + (8 - i) + '" class="rank' + (i + 1) + '">';
@@ -18,47 +34,33 @@ function newGame() {
         }
         makeBoard += '</tr>'
     }
-    //event to set board
+    //fill table with variable "make board"
     document.getElementById('chessBoard').innerHTML = makeBoard;
 
-    //Assign names to buttons
+/*=====Start Formation Pieces=====*/
 
     //White pieces
-    document.getElementById('A1button').setAttribute('name', 'WR');
-    document.getElementById('B1button').setAttribute('name', 'WN');
-    document.getElementById('C1button').setAttribute('name', 'WB');
-    document.getElementById('D1button').setAttribute('name', 'WQ');
-    document.getElementById('E1button').setAttribute('name', 'WK');
-    document.getElementById('F1button').setAttribute('name', 'WB');
-    document.getElementById('G1button').setAttribute('name', 'WN');
-    document.getElementById('H1button').setAttribute('name', 'WR');
-
+    for(var i = 0; i < startFormation.length; i++){
+        document.getElementById(lettersArray[i] + 1 + 'button').setAttribute('name' , 'W'+startFormation[i]);
+    }
     //White pawns
     for (var i = 0; i < 8; i++) {
         document.getElementById(lettersArray[i] + '2button').setAttribute('name', 'WP');
     }
-
     //empty spaces
     for (var i = 2; i < 6; i++) {
         for (var j = 0; j < 8; j++) {
             document.getElementById(lettersArray[j] + (i + 1) + 'button').setAttribute('name', 'empty');
         }
     }
-
     //Black pawns
     for (var i = 0; i < 8; i++) {
         document.getElementById(lettersArray[i] + '7button').setAttribute('name', 'BP');
     }
-
     //Black pieces
-    document.getElementById('A8button').setAttribute('name', 'BR');
-    document.getElementById('B8button').setAttribute('name', 'BN');
-    document.getElementById('C8button').setAttribute('name', 'BB');
-    document.getElementById('D8button').setAttribute('name', 'BQ');
-    document.getElementById('E8button').setAttribute('name', 'BK');
-    document.getElementById('F8button').setAttribute('name', 'BB');
-    document.getElementById('G8button').setAttribute('name', 'BN');
-    document.getElementById('H8button').setAttribute('name', 'BR');
+    for(var i = 0; i < startFormation.length; i++){
+        document.getElementById(lettersArray[i] + 8 + 'button').setAttribute('name' , 'B'+startFormation[i]);
+    }
 
     //checkerboard pattern
     for (var i = 0; i < 8; i++) {
@@ -73,9 +75,7 @@ function newGame() {
         }
     }
 
-    //function to highlight a piece
-    var unselectedPiece = document.getElementsByClassName('chessPiece')
-    var selectedPiece = document.getElementsByClassName('chessPiece-selected');
+    //function to select a piece
     function highlightPiece() {
         var classname = this.getAttribute('class');
         for (var i = 0; i < selectedPiece.length; i++) {
@@ -89,18 +89,17 @@ function newGame() {
 
     }
 
-    //event for highlighting a piece
+    //event for selecting a piece
     for (var i = 0; i < unselectedPiece.length; i++) {
         document.getElementsByClassName('chessPiece')[i].addEventListener('click', highlightPiece, false);
     }
 
     //function to show where a piece can move
-    var pieceIndex = null;
     function pieceMoves() {
 
         //reset movable squares
-
         var movableSquares = document.querySelectorAll('.chessPiece-move');
+
         //remove highlights on lost focus
         if (movableSquares.length) {
             for (var i = 0; i < movableSquares.length; i++) {
@@ -111,13 +110,10 @@ function newGame() {
         if (document.getElementsByClassName('chessPiece-selected').length) {
 
             //find selected piece
+            pieceColor = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('name').charAt(0);
+            pieceID = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('id');
+            pieceName = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('name');
 
-            //function to move a piece
-
-            var pieceColor = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('name').charAt(0);
-            var pieceID = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('id');
-            var pieceName = document.getElementsByClassName('chessPiece-selected')[0].getAttribute('name');
-            
             for (var i = 0; i < piecesArray.length; i++) {
                 if (pieceName == piecesArray[i]) {
                     pieceIndex = i;
@@ -127,6 +123,8 @@ function newGame() {
             //document coordinates
             var y = parseInt((selectedPiece[0].getAttribute('id')).charAt(1));
             var x = lettersArray.indexOf((selectedPiece[0].getAttribute('id')).charAt(0));
+
+            //shows where pieces can move by selected piece
             switch (pieceIndex) {
 
                 //white pawns
@@ -886,54 +884,113 @@ function newGame() {
                 default: //see case 12
                     break;
             }
-            
-            function doMove() {
-                var destination = pieceName.charAt(1) + this.getAttribute('id').charAt(0) + this.getAttribute('id').charAt(1);
-                    console.log(destination);
 
-                if ((turnCounter + 2) % 2 != 0 && pieceColor == 'W') {
-                    this.setAttribute('name', pieceName);
-                    document.getElementById(pieceID).setAttribute('name', 'empty');
-                    for (var i = 0; i <= 12; i++) {
-                        var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
-                        for (var j = 0; j < addImg.length; j++) {
-                            if (i != 12) {
-                                addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
-                            } else {
-                                addImg[j].innerHTML = "";
-                            }
-                        }
-                    }
-                    turnCounter++;
-                    console.log(turnCounter + " Black's Turn");
-                }else if((turnCounter + 2) % 2 == 0 && pieceColor == 'B'){
-                    this.setAttribute('name', pieceName);
-                    document.getElementById(pieceID).setAttribute('name', 'empty');
-                    for (var i = 0; i <= 12; i++) {
-                        var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
-                        for (var j = 0; j < addImg.length; j++) {
-                            if (i != 12) {
-                                addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
-                            } else {
-                                addImg[j].innerHTML = "";
-                            }
-                        }
-                    }
-                    turnCounter++;
-                    console.log(turnCounter + " White's Turn");
-                }
-                currentPiece = '';
-                currentPieceColor ='';
-                currentPieceID = '';
+            //doMove event
+            for (var i = 0; i < document.querySelectorAll('.chessPiece-move').length; i++) {
+                document.querySelectorAll('.chessPiece-move')[i].addEventListener('click', doMove, false);
             }
-
-            for (var i = 0; i < document.getElementsByClassName('chessPiece-move').length; i++) {
-                document.getElementsByClassName('chessPiece-move')[i].addEventListener('click', doMove, false);
+            //remove old listeners
+            for (var i = 0; i < document.getElementsByClassName('chessPiece').length; i++) {
+                document.getElementsByClassName('chessPiece')[i].removeEventListener('click', doMove);
             }
         }
     }
+
+    //event to show movable squares
     for (var i = 0; i < unselectedPiece.length; i++) {
         document.getElementsByClassName('chessPiece')[i].addEventListener('click', pieceMoves, false);
+    }
+
+    //funtion to move a piece
+    function doMove() {
+        origin = pieceName.charAt(1) + pieceID.charAt(0) + pieceID.charAt(1);
+        destination = pieceName.charAt(1) + this.getAttribute('id').charAt(0) + this.getAttribute('id').charAt(1);
+
+        //White's Turn
+        if ((turnCounter + 2) % 2 != 0 && pieceColor == 'W') {
+
+            //special case for Queen Promotion
+            if (pieceName.charAt(1) == 'P' && destination.charAt(2) == 8) {
+                this.setAttribute('name', 'WQ');
+                destination = 'Q' + this.getAttribute('id').charAt(0) + this.getAttribute('id').charAt(1);
+                document.getElementById(pieceID).setAttribute('name', 'empty');
+                for (var i = 0; i <= 12; i++) {
+                    var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
+                    for (var j = 0; j < addImg.length; j++) {
+                        if (i != 12) {
+                            addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
+                        } else {
+                            addImg[j].innerHTML = "";
+                        }
+                    }
+                }
+            }
+
+            //all other cases as normal
+            else {
+                this.setAttribute('name', pieceName);
+                document.getElementById(pieceID).setAttribute('name', 'empty');
+                for (var i = 0; i <= 12; i++) {
+                    var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
+                    for (var j = 0; j < addImg.length; j++) {
+                        if (i != 12) {
+                            addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
+                        } else {
+                            addImg[j].innerHTML = "";
+                        }
+                    }
+                }
+            }
+            scoreBoard.innerHTML += '<tr><td>(' + turnCounter + ') White: ' + Math.round(turnCounter / 2) + '</td><td>' + origin + '</td><td>' + destination + '</td></tr>';
+            document.getElementById('turnColor').textContent = "Black's Turn";
+            turnCounter++;
+        }
+
+        //Black's Turn
+        else if ((turnCounter + 2) % 2 == 0 && pieceColor == 'B') {
+
+            //special case for Queen Promotion
+            if (pieceName.charAt(1) == 'P' && destination.charAt(2) == 1) {
+                this.setAttribute('name', 'BQ');
+                destination = 'Q' + this.getAttribute('id').charAt(0) + this.getAttribute('id').charAt(1);
+                document.getElementById(pieceID).setAttribute('name', 'empty');
+                for (var i = 0; i <= 12; i++) {
+                    var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
+                    for (var j = 0; j < addImg.length; j++) {
+                        if (i != 12) {
+                            addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
+                        } else {
+                            addImg[j].innerHTML = "";
+                        }
+                    }
+                }
+            }
+
+            //all other cases as normal
+            else {
+                this.setAttribute('name', pieceName);
+                document.getElementById(pieceID).setAttribute('name', 'empty');
+                for (var i = 0; i <= 12; i++) {
+                    var addImg = document.querySelectorAll('[name="' + piecesArray[i] + '"');
+                    for (var j = 0; j < addImg.length; j++) {
+                        if (i != 12) {
+                            addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
+                        } else {
+                            addImg[j].innerHTML = "";
+                        }
+                    }
+                }
+            }
+            scoreBoard.innerHTML += '<tr><td>(' + turnCounter + ') Black: ' + Math.round(turnCounter / 2) + '</td><td>' + origin + '</td><td>' + destination + '</td></tr>';
+            turnCounter++;
+            document.getElementById('turnColor').textContent = "White's Turn";
+        }
+
+        //remove old event listeners
+        this.removeEventListener('click', doMove);
+        for (var i = 0; i < document.getElementsByClassName('chessPiece').length; i++) {
+            document.getElementsByClassName('chessPiece')[i].removeEventListener('click', doMove);
+        }
     }
 
     //add images to named pieces
@@ -943,7 +1000,28 @@ function newGame() {
             addImg[j].innerHTML = '<img src="../img/' + piecesArray[i] + '.png">';
         }
     }
-
 }
+
+//events to create a new game
 document.getElementById('resetBoard').addEventListener('click', newGame, false);
 window.onload = newGame;
+
+//function to hide scoreboard
+function toggleScoreBoard() {
+
+    //var for scoreboard
+    var score = document.getElementById('moves');
+
+    //if showing hide
+    if (score.getAttribute('class') == 'show') {
+        score.setAttribute('class', 'hide');
+    }
+
+    //if hiding show
+    else if (score.getAttribute('class') == 'hide') {
+        score.setAttribute('class', 'show');
+    }
+}
+
+//event to hide scoreboard
+document.getElementById('hideScore').addEventListener('click', toggleScoreBoard, false);

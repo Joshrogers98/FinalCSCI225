@@ -6,11 +6,22 @@
     <link rel="stylesheet" href="../css/chess.css">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
+
 <body>
+
     <div class="chessBoard">
+        <h1 id="turnColor">White's Turn</h1>
         <button id="resetBoard">New Game</button>
+        <button id="hideScore">Toggle Scoreboard</button>
         <table id="chessBoard"></table>
     </div>
+
+    <div class="moves">
+        <table id="moves" class="show">
+        </table>
+    </div>
+    
     <script src="../js/chess.js"></script>
+
 </body>
 </html>

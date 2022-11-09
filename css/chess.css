@@ -31,8 +31,16 @@ td[name="light"]{
 td[name="dark"]{
     background-color: saddlebrown;
 }
+#moves{
+    background-color: darksalmon;
+    opacity: 70%;
+}
 
 /*02 layout*/
+
+.hide{
+    visibility: hidden;
+}
 .chessBoard{
     text-align: center;
 }
@@ -46,7 +54,6 @@ td[name="dark"]{
     height: 960px;
     table-layout: grid;
 }
-
 #chessBoard tr,
 td {
     height: 120px;
@@ -54,7 +61,6 @@ td {
     padding: 0;
     margin: 0;
 }
-
 .chessPiece , .chessPiece-selected , .chessPiece-move{
     width: 116px;
     height: 116px;
@@ -62,4 +68,18 @@ td {
     padding: 0;
     margin: 0;
 
+}
+#moves{
+    position: absolute;
+    border-collapse: collapse;
+    top: 100px;
+    right: 0;
+    margin: 20px;
+}
+#moves tr,#moves td, #moves th{
+    border: black solid 1px;
+    padding: 2px;
+    width: 100px;
+    text-align: center;
+    height: auto;
 }
