@@ -3,6 +3,7 @@ const lettersArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 const piecesArray = ['WP', 'WR', 'WN', 'WB', 'WQ', 'WK', 'BP', 'BR', 'BN', 'BB', 'BQ', 'BK', 'empty'];
 const startFormation = ['R' , 'N' , 'B' , 'Q' , 'K' , 'B' , 'N' , 'R']
 const scoreBoard = document.getElementById('moves');
+const turnColor = document.getElementById('turnColor');
 
 //establish "global" variables to be used later in local functions
 var pieceIndex = null;
@@ -19,6 +20,9 @@ function newGame() {
 
     //reset scoreboard
     scoreBoard.innerHTML = '<thead><tr><th>Move</th><th>Origin</th><th>Destination</th></tr></thead>';
+
+    //reset turn indicator
+    turnColor.textContent = "White's Turn"
 
     //establish turn counter / reset to 1
     var turnCounter = 1;
