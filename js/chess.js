@@ -4,14 +4,14 @@ const piecesArray = ['WP', 'WR', 'WN', 'WB', 'WQ', 'WK', 'BP', 'BR', 'BN', 'BB',
 const startFormation = ['R' , 'N' , 'B' , 'Q' , 'K' , 'B' , 'N' , 'R']
 const scoreBoard = document.getElementById('moves');
 const turnColor = document.getElementById('turnColor');
+const unselectedPiece = document.getElementsByClassName('chessPiece')
+const selectedPiece = document.getElementsByClassName('chessPiece-selected');
 
 //establish "global" variables to be used later in local functions
 var pieceIndex = null;
 var pieceColor = '';
 var pieceID = '';
 var pieceName = '';
-var unselectedPiece = document.getElementsByClassName('chessPiece')
-var selectedPiece = document.getElementsByClassName('chessPiece-selected');
 var origin = '';
 var destination = '';
 
@@ -62,7 +62,7 @@ function newGame() {
     for (var i = 0; i < 8; i++) {
         document.getElementById(lettersArray[i] + '7button').setAttribute('name', 'BP');
     }
-    
+
     //Black pieces
     for(var i = 0; i < startFormation.length; i++){
         document.getElementById(lettersArray[i] + 8 + 'button').setAttribute('name' , 'B'+startFormation[i]);
