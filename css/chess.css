@@ -35,6 +35,9 @@ td[name="dark"]{
     background-color: darksalmon;
     opacity: 70%;
 }
+body{
+    background-color: gray;
+}
 
 /*02 layout*/
 
