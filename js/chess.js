@@ -41,26 +41,28 @@ function newGame() {
     //fill table with variable "make board"
     document.getElementById('chessBoard').innerHTML = makeBoard;
 
-/*=====Start Formation Pieces=====*/
-
     //White pieces
     for(var i = 0; i < startFormation.length; i++){
         document.getElementById(lettersArray[i] + 1 + 'button').setAttribute('name' , 'W'+startFormation[i]);
     }
+
     //White pawns
     for (var i = 0; i < 8; i++) {
         document.getElementById(lettersArray[i] + '2button').setAttribute('name', 'WP');
     }
+
     //empty spaces
     for (var i = 2; i < 6; i++) {
         for (var j = 0; j < 8; j++) {
             document.getElementById(lettersArray[j] + (i + 1) + 'button').setAttribute('name', 'empty');
         }
     }
+
     //Black pawns
     for (var i = 0; i < 8; i++) {
         document.getElementById(lettersArray[i] + '7button').setAttribute('name', 'BP');
     }
+    
     //Black pieces
     for(var i = 0; i < startFormation.length; i++){
         document.getElementById(lettersArray[i] + 8 + 'button').setAttribute('name' , 'B'+startFormation[i]);
